@@ -1,0 +1,13 @@
+<header class="barra">
+  <div class="contenedor barra-interior">
+    <a routerLink="/" class="marca">Mesa de Ayuda</a>
+    <nav>
+      <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Bandeja</a>
+      <a routerLink="/indicadores" routerLinkActive="activo">Indicadores</a>
+    </nav>
+    <a routerLink="/nuevo" class="boton primario">+ Nuevo ticket</a>
+  </div>
+</header>
+<main class="contenedor">
+  <router-outlet />
+</main>

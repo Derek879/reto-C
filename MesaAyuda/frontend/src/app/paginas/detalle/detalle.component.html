@@ -1,0 +1,98 @@
+<a routerLink="/" class="volver">← Bandeja</a>
+
+@if (error()) { <div class="alerta error">{{ error() }}</div> }
+
+@if (ticket(); as t) {
+  <div class="cabecera">
+    <div>
+      <div class="codigo">{{ t.codigo }}</div>
+      <h1>{{ t.titulo }}</h1>
+      <div class="etiquetas">
+        <span class="etiqueta prioridad-{{ t.prioridad }}">{{ etiquetaPrioridad[t.prioridad] }}</span>
+        <span class="etiqueta estado">{{ etiquetaEstado[t.estado] }}</span>
+        <span class="etiqueta">{{ t.categoria }}</span>
+        @if (t.slaIncumplido) { <span class="etiqueta peligro">SLA incumplido</span> }
+      </div>
+    </div>
+  </div>
+
+  <div class="columnas">
+    <section>
+      <div class="tarjeta">
+        <h2>Descripción</h2>
+        <p class="descripcion">{{ t.descripcion }}</p>
+        @if (t.solucion) {
+          <h2>Solución</h2>
+          <p class="descripcion">{{ t.solucion }}</p>
+        }
+      </div>
+
+      <div class="tarjeta">
+        <h2>Historial</h2>
+        <ul class="historial">
+          @for (c of t.comentarios; track $index) {
+            <li [class.sistema]="c.autor === 'Sistema'">
+              <div class="meta"><strong>{{ c.autor }}</strong> · {{ c.fecha | date: 'dd/MM/yyyy HH:mm' }}</div>
+              <div>{{ c.texto }}</div>
+            </li>
+          } @empty {
+            <li class="apagado">Sin movimientos todavía.</li>
+          }
+        </ul>
+        @if (t.estado !== 'Cerrado') {
+          <form class="formulario" (ngSubmit)="comentar()">
+            <input name="autor" [(ngModel)]="autor" placeholder="Tu nombre" required />
+            <textarea name="comentario" [(ngModel)]="comentario" rows="2" placeholder="Agregar comentario" required></textarea>
+            <button class="boton" [disabled]="ocupado() || !autor || !comentario">Comentar</button>
+          </form>
+        }
+      </div>
+    </section>
+
+    <aside>
+      <div class="tarjeta datos">
+        <div><span class="apagado">Solicitante</span>{{ t.solicitante }}</div>
+        <div><span class="apagado">Asignado a</span>{{ t.asignadoA ?? 'Sin asignar' }}</div>
+        <div><span class="apagado">Creado</span>{{ t.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</div>
+        <div><span class="apagado">Fecha límite</span>{{ t.fechaLimite | date: 'dd/MM/yyyy HH:mm' }}
+          @if (activo) { <small [class.texto-peligro]="t.slaIncumplido">({{ t.fechaLimite | sla: ahora }})</small> }
+        </div>
+        @if (t.fechaResolucion) { <div><span class="apagado">Resuelto</span>{{ t.fechaResolucion | date: 'dd/MM/yyyy HH:mm' }}</div> }
+      </div>
+
+      <div class="tarjeta acciones-ticket">
+        <h2>Acciones</h2>
+        @if (activo) {
+          <form class="en-linea" (ngSubmit)="asignar()">
+            <input name="tecnico" [(ngModel)]="tecnico" placeholder="Técnico" />
+            <button class="boton" [disabled]="ocupado() || !tecnico">{{ t.asignadoA ? 'Reasignar' : 'Asignar' }}</button>
+          </form>
+          <label class="apagado pequeno">Prioridad
+            <select [ngModel]="t.prioridad" (ngModelChange)="cambiarPrioridad($event)" [disabled]="ocupado()">
+              @for (p of prioridades; track p) { <option [value]="p">{{ etiquetaPrioridad[p] }}</option> }
+            </select>
+          </label>
+        }
+        @if (t.estado === 'EnProgreso' || t.estado === 'EnEspera' || t.estado === 'Resuelto') {
+          <textarea name="texto" [(ngModel)]="texto" rows="3"
+                    [placeholder]="t.estado === 'Resuelto' ? 'Motivo para reabrir' : 'Solución aplicada o motivo de espera'"></textarea>
+        }
+        <div class="botones">
+          @if (t.estado === 'EnProgreso') {
+            <button class="boton primario" (click)="resolver()" [disabled]="ocupado() || !texto">Resolver</button>
+            <button class="boton" (click)="ponerEnEspera()" [disabled]="ocupado() || !texto">Poner en espera</button>
+          }
+          @if (t.estado === 'EnEspera') {
+            <button class="boton primario" (click)="resolver()" [disabled]="ocupado() || !texto">Resolver</button>
+            <button class="boton" (click)="retomar()" [disabled]="ocupado()">Retomar</button>
+          }
+          @if (t.estado === 'Resuelto') {
+            <button class="boton primario" (click)="cerrar()" [disabled]="ocupado()">Cerrar ticket</button>
+            <button class="boton" (click)="reabrir()" [disabled]="ocupado() || !texto">Reabrir</button>
+          }
+          @if (t.estado === 'Cerrado') { <p class="apagado">El ticket está cerrado.</p> }
+        </div>
+      </div>
+    </aside>
+  </div>
+}

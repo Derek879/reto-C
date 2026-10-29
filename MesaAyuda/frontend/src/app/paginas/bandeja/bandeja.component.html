@@ -1,0 +1,71 @@
+<div class="encabezado">
+  <h1>Bandeja de tickets</h1>
+  @if (pagina(); as p) { <span class="apagado">{{ p.total }} ticket(s)</span> }
+</div>
+
+<form class="filtros" (ngSubmit)="aplicarFiltros()">
+  <input name="buscar" [(ngModel)]="filtro.buscar" placeholder="Buscar por título o solicitante" />
+  <select name="estado" [(ngModel)]="filtro.estado" (change)="aplicarFiltros()" aria-label="Estado">
+    <option value="">Todos los estados</option>
+    @for (e of estados; track e) { <option [value]="e">{{ etiquetaEstado[e] }}</option> }
+  </select>
+  <select name="prioridad" [(ngModel)]="filtro.prioridad" (change)="aplicarFiltros()" aria-label="Prioridad">
+    <option value="">Todas las prioridades</option>
+    @for (p of prioridades; track p) { <option [value]="p">{{ etiquetaPrioridad[p] }}</option> }
+  </select>
+  <select name="categoria" [(ngModel)]="filtro.categoria" (change)="aplicarFiltros()" aria-label="Categoría">
+    <option value="">Todas las categorías</option>
+    @for (c of categorias; track c) { <option [value]="c">{{ c }}</option> }
+  </select>
+  <label class="check"><input type="checkbox" name="vencidos" [(ngModel)]="filtro.soloVencidos" (change)="aplicarFiltros()" /> Solo SLA incumplido</label>
+  <button class="boton" type="submit">Buscar</button>
+</form>
+
+@if (error()) { <div class="alerta error">{{ error() }}</div> }
+
+@if (pagina(); as p) {
+  @if (p.items.length === 0) {
+    <p class="vacio">No hay tickets con esos filtros.</p>
+  } @else {
+    <div class="tabla-envoltura">
+      <table class="tabla">
+        <thead>
+          <tr><th>Código</th><th>Título</th><th>Prioridad</th><th>Estado</th><th>Asignado</th><th>SLA</th></tr>
+        </thead>
+        <tbody>
+          @for (t of p.items; track t.id) {
+            <tr [routerLink]="['/tickets', t.id]" class="fila">
+              <td class="codigo">{{ t.codigo }}</td>
+              <td>
+                <div class="titulo">{{ t.titulo }}</div>
+                <div class="apagado pequeno">{{ t.categoria }} · {{ t.solicitante }} · {{ t.fechaCreacion | date: 'dd/MM HH:mm' }}</div>
+              </td>
+              <td><span class="etiqueta prioridad-{{ t.prioridad }}">{{ etiquetaPrioridad[t.prioridad] }}</span></td>
+              <td><span class="etiqueta estado">{{ etiquetaEstado[t.estado] }}</span></td>
+              <td>{{ t.asignadoA ?? '—' }}</td>
+              <td>
+                @if (esActivo(t)) {
+                  <span [class.texto-peligro]="vencido(t)">{{ t.fechaLimite | sla: ahora() }}</span>
+                } @else if (t.slaIncumplido) {
+                  <span class="texto-peligro">Incumplido</span>
+                } @else {
+                  <span class="texto-ok">Cumplido</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPaginas > 1) {
+      <div class="paginacion">
+        <button class="boton" [disabled]="p.numeroPagina <= 1" (click)="irAPagina(p.numeroPagina - 1)">Anterior</button>
+        <span>Página {{ p.numeroPagina }} de {{ totalPaginas }}</span>
+        <button class="boton" [disabled]="p.numeroPagina >= totalPaginas" (click)="irAPagina(p.numeroPagina + 1)">Siguiente</button>
+      </div>
+    }
+  }
+} @else if (cargando()) {
+  <p class="apagado">Cargando…</p>
+}

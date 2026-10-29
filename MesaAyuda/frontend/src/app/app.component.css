@@ -1,0 +1,10 @@
+.barra { background: #1e293b; color: #fff; margin-bottom: 24px; }
+.barra-interior { display: flex; align-items: center; gap: 24px; height: 56px; padding-bottom: 0; }
+.marca { color: #fff; font-weight: 600; font-size: 1.1rem; text-decoration: none; }
+nav { display: flex; gap: 16px; flex: 1; }
+nav a { color: #cbd5e1; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+nav a.activo, nav a:hover { color: #fff; border-bottom-color: #38bdf8; }
+@media (max-width: 600px) {
+  .barra-interior { gap: 12px; }
+  .marca { display: none; }
+}

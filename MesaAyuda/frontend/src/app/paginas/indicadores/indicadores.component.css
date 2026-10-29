@@ -1,0 +1,11 @@
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi span { display: block; color: #64748b; font-size: .85rem; }
+.kpi strong { font-size: 2rem; font-weight: 600; }
+.alerta-kpi strong { color: #dc2626; }
+.grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+h2 { font-size: 1rem; margin: 0 0 12px; }
+.barra-fila { display: grid; grid-template-columns: 110px 1fr 28px; gap: 8px; align-items: center; margin-bottom: 8px; font-size: .9rem; }
+.nombre { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pista { background: #e2e8f0; border-radius: 4px; height: 10px; overflow: hidden; }
+.relleno { display: block; height: 100%; background: #0ea5e9; border-radius: 4px; }
+.valor { text-align: right; font-variant-numeric: tabular-nums; }

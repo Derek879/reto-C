@@ -49,3 +49,34 @@ jobs:
       - run: dotnet restore
       - run: dotnet build --no-restore -c Release
       - run: dotnet test --no-build -c Release
+
+  mesa-ayuda-backend:
+    name: MesaAyuda (API en capas)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: MesaAyuda/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore
+      - run: dotnet build --no-restore -c Release
+      - run: dotnet test --no-build -c Release
+
+  mesa-ayuda-frontend:
+    name: MesaAyuda (Angular)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: MesaAyuda/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: MesaAyuda/frontend/package-lock.json
+      - run: npm ci
+      - run: npx ng build --configuration production

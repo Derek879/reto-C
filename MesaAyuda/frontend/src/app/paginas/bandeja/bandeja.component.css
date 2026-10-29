@@ -1,0 +1,10 @@
+.encabezado { display: flex; align-items: baseline; gap: 12px; }
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; align-items: center; }
+.filtros input:not([type=checkbox]) { flex: 1 1 220px; }
+.check { display: flex; align-items: center; gap: 6px; font-size: .9rem; }
+.fila { cursor: pointer; }
+.codigo { font-family: ui-monospace, monospace; color: #475569; white-space: nowrap; }
+.titulo { font-weight: 500; }
+.pequeno { font-size: .8rem; }
+.vacio { padding: 32px; text-align: center; color: #64748b; }
+.paginacion { display: flex; gap: 12px; align-items: center; justify-content: center; margin-top: 16px; }

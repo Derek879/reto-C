@@ -1,0 +1,40 @@
+<h1>Nuevo ticket</h1>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" class="formulario tarjeta">
+  @if (errores().length) {
+    <div class="alerta error">@for (e of errores(); track e) { <div>{{ e }}</div> }</div>
+  }
+
+  <label>Título
+    <input formControlName="titulo" placeholder="Ej.: No conecta la VPN" />
+    @if (invalido('titulo')) { <small class="texto-peligro">El título es obligatorio.</small> }
+  </label>
+
+  <label>Descripción
+    <textarea formControlName="descripcion" rows="5" placeholder="¿Qué pasa, desde cuándo y a quién afecta?"></textarea>
+    @if (invalido('descripcion')) { <small class="texto-peligro">Describe el problema con al menos 15 caracteres.</small> }
+  </label>
+
+  <div class="fila-campos">
+    <label>Categoría
+      <select formControlName="categoria">
+        @for (c of categorias; track c) { <option [value]="c">{{ c }}</option> }
+      </select>
+    </label>
+    <label>Prioridad
+      <select formControlName="prioridad">
+        @for (p of prioridades; track p) { <option [value]="p">{{ etiquetaPrioridad[p] }} (SLA {{ horasSla[p] }} h)</option> }
+      </select>
+    </label>
+  </div>
+
+  <label>Solicitante
+    <input formControlName="solicitante" placeholder="Nombre de quien reporta" />
+    @if (invalido('solicitante')) { <small class="texto-peligro">Indica quién reporta el problema.</small> }
+  </label>
+
+  <div class="acciones">
+    <button class="boton primario" type="submit" [disabled]="enviando()">{{ enviando() ? 'Guardando…' : 'Registrar ticket' }}</button>
+    <a routerLink="/" class="boton">Cancelar</a>
+  </div>
+</form>

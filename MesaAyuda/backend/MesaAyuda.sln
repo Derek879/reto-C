@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1A934BBF-EA8D-4277-B416-012C03A5F26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaAyuda.Api", "src\MesaAyuda.Api\MesaAyuda.Api.csproj", "{BAAB6177-FB85-40EA-8299-D68E707FCB43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaAyuda.Application", "src\MesaAyuda.Application\MesaAyuda.Application.csproj", "{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaAyuda.Domain", "src\MesaAyuda.Domain\MesaAyuda.Domain.csproj", "{6C13A691-81C8-4157-9426-B6C662C9FEEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaAyuda.Infrastructure", "src\MesaAyuda.Infrastructure\MesaAyuda.Infrastructure.csproj", "{5921162C-3230-47F1-827B-0A0056F93C3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AEBD1CF7-E4AE-41EB-A7D2-27DA8BA8E9FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaAyuda.Tests", "tests\MesaAyuda.Tests\MesaAyuda.Tests.csproj", "{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAAB6177-FB85-40EA-8299-D68E707FCB43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAAB6177-FB85-40EA-8299-D68E707FCB43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAAB6177-FB85-40EA-8299-D68E707FCB43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAAB6177-FB85-40EA-8299-D68E707FCB43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C13A691-81C8-4157-9426-B6C662C9FEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C13A691-81C8-4157-9426-B6C662C9FEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C13A691-81C8-4157-9426-B6C662C9FEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C13A691-81C8-4157-9426-B6C662C9FEEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5921162C-3230-47F1-827B-0A0056F93C3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5921162C-3230-47F1-827B-0A0056F93C3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5921162C-3230-47F1-827B-0A0056F93C3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5921162C-3230-47F1-827B-0A0056F93C3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BAAB6177-FB85-40EA-8299-D68E707FCB43} = {1A934BBF-EA8D-4277-B416-012C03A5F26C}
+		{5D84FB8D-13F9-4ACD-8683-4C8CA5B5E68F} = {1A934BBF-EA8D-4277-B416-012C03A5F26C}
+		{6C13A691-81C8-4157-9426-B6C662C9FEEA} = {1A934BBF-EA8D-4277-B416-012C03A5F26C}
+		{5921162C-3230-47F1-827B-0A0056F93C3B} = {1A934BBF-EA8D-4277-B416-012C03A5F26C}
+		{92703FEC-A374-4FB7-9F6B-E8EF296E8BA2} = {AEBD1CF7-E4AE-41EB-A7D2-27DA8BA8E9FF}
+	EndGlobalSection
+EndGlobal

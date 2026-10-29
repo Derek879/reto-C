@@ -1,0 +1,33 @@
+<h1>Indicadores</h1>
+
+@if (error()) { <div class="alerta error">{{ error() }}</div> }
+
+@if (datos(); as d) {
+  <div class="kpis">
+    <div class="tarjeta kpi"><span>Tickets activos</span><strong>{{ d.activos }}</strong></div>
+    <div class="tarjeta kpi" [class.alerta-kpi]="d.vencidosActivos > 0"><span>Activos vencidos</span><strong>{{ d.vencidosActivos }}</strong></div>
+    <div class="tarjeta kpi"><span>Cumplimiento SLA (30 días)</span><strong>{{ d.cumplimientoSla | number: '1.0-1' }}%</strong></div>
+    <div class="tarjeta kpi"><span>Tiempo promedio de resolución</span><strong>{{ d.horasPromedioResolucion | number: '1.0-1' }} h</strong></div>
+  </div>
+
+  <div class="grupos">
+    @for (grupo of [
+      { titulo: 'Activos por prioridad', lista: d.activosPorPrioridad },
+      { titulo: 'Activos por categoría', lista: d.activosPorCategoria },
+      { titulo: 'Carga por técnico', lista: d.activosPorTecnico }
+    ]; track grupo.titulo) {
+      <div class="tarjeta">
+        <h2>{{ grupo.titulo }}</h2>
+        @for (item of grupo.lista; track item.clave) {
+          <div class="barra-fila">
+            <span class="nombre">{{ etiqueta(item.clave) }}</span>
+            <span class="pista"><span class="relleno" [style.width.%]="ancho(item, grupo.lista)"></span></span>
+            <span class="valor">{{ item.cantidad }}</span>
+          </div>
+        } @empty {
+          <p class="apagado">Sin tickets activos.</p>
+        }
+      </div>
+    }
+  </div>
+}
