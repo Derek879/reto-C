@@ -1,0 +1,27 @@
+# Levanta SQL Server y la API: docker compose up --build
+# Swagger queda en http://localhost:8080/swagger
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Taller#2026Local"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Taller#2026Local' -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__SqlServer: "Server=sqlserver;Database=RecepcionCelulares;User Id=sa;Password=Taller#2026Local;TrustServerCertificate=True"
+      Jwt__Clave: "clave-local-de-docker-con-mas-de-32-caracteres"
+      Database__MigrarAlIniciar: "true"
+    ports:
+      - "8080:8080"
