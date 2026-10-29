@@ -1,0 +1,53 @@
+@model Producto
+@{ ViewData["Title"] = Model.Id == 0 ? "Nuevo producto" : "Editar producto"; }
+
+<h1 class="h3 mb-3">@ViewData["Title"]</h1>
+
+<form asp-action="Guardar" method="post" class="col-lg-8">
+    @if (!ViewData.ModelState.IsValid)
+    {
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    }
+    <input type="hidden" asp-for="Id" />
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="Codigo" class="form-label"></label>
+            <input asp-for="Codigo" class="form-control text-uppercase" />
+            <span asp-validation-for="Codigo" class="text-danger small"></span>
+        </div>
+        <div class="col-md-8">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CategoriaId" class="form-label"></label>
+            <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="form-select">
+                <option value="0">Elige una categoría</option>
+            </select>
+            <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PrecioVenta" class="form-label"></label>
+            <div class="input-group"><span class="input-group-text">S/</span>
+                <input asp-for="PrecioVenta" class="form-control" step="0.10" /></div>
+            <span asp-validation-for="PrecioVenta" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Stock" class="form-label"></label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="StockMinimo" class="form-label"></label>
+            <input asp-for="StockMinimo" class="form-control" />
+            <span asp-validation-for="StockMinimo" class="text-danger small"></span>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

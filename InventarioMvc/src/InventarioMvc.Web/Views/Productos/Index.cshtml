@@ -1,0 +1,46 @@
+@model IEnumerable<Producto>
+@{ ViewData["Title"] = "Productos"; }
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <h1 class="h3 me-auto mb-0">Productos</h1>
+    <a class="btn btn-outline-secondary" asp-action="Exportar">Exportar a Excel</a>
+    <a class="btn btn-primary" asp-action="Crear">+ Nuevo producto</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-6"><input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre o código" /></div>
+    <div class="col-sm-4">
+        <select name="categoriaId" asp-items="ViewBag.Categorias" class="form-select">
+            <option value="">Todas las categorías</option>
+        </select>
+    </div>
+    <div class="col-sm-2"><button class="btn btn-secondary w-100">Filtrar</button></div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th class="text-end">Precio</th><th class="text-end">Stock</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td><code>@p.Codigo</code></td>
+            <td>@p.Nombre</td>
+            <td>@p.Categoria</td>
+            <td class="text-end">@p.PrecioVenta.ToString("C")</td>
+            <td class="text-end">
+                @p.Stock
+                @if (p.StockBajo) { <span class="badge text-bg-warning ms-1">Reponer</span> }
+            </td>
+            <td class="text-end text-nowrap">
+                <a class="btn btn-sm btn-outline-primary" asp-action="Editar" asp-route-id="@p.Id">Editar</a>
+                <form asp-action="Desactivar" asp-route-id="@p.Id" method="post" class="d-inline"
+                      onsubmit="return confirm('¿Desactivar @p.Nombre?');">
+                    <button class="btn btn-sm btn-outline-danger">Desactivar</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>

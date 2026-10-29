@@ -1,0 +1,32 @@
+@model Venta
+@{ ViewData["Title"] = $"Venta N° {Model.Id}"; }
+
+<div class="d-flex align-items-center mb-3">
+    <h1 class="h3 me-auto mb-0">Venta N° @Model.Id
+        @if (Model.Anulada) { <span class="badge text-bg-danger align-middle">Anulada</span> }
+    </h1>
+    @if (!Model.Anulada)
+    {
+        <form asp-action="Anular" asp-route-id="@Model.Id" method="post"
+              onsubmit="return confirm('¿Anular esta venta? El stock será devuelto.');">
+            <button class="btn btn-outline-danger">Anular venta</button>
+        </form>
+    }
+</div>
+
+<p class="mb-1"><strong>Cliente:</strong> @Model.Cliente</p>
+<p><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+
+<table class="table">
+    <thead><tr><th>Código</th><th>Producto</th><th class="text-end">Cantidad</th><th class="text-end">P. unitario</th><th class="text-end">Subtotal</th></tr></thead>
+    <tbody>
+    @foreach (var d in Model.Detalle)
+    {
+        <tr><td><code>@d.Codigo</code></td><td>@d.Nombre</td><td class="text-end">@d.Cantidad</td>
+            <td class="text-end">@d.PrecioUnitario.ToString("C")</td><td class="text-end">@d.Subtotal.ToString("C")</td></tr>
+    }
+    </tbody>
+    <tfoot><tr class="fw-semibold"><td colspan="4">Total</td><td class="text-end">@Model.Total.ToString("C")</td></tr></tfoot>
+</table>
+
+<a asp-action="Index">← Volver a ventas</a>

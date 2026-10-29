@@ -6,14 +6,12 @@ on:
   pull_request:
 
 jobs:
-  build-test:
+  recepcion-celulares:
+    name: RecepcionCelulares (Web API)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        proyecto: [RecepcionCelulares]
     defaults:
       run:
-        working-directory: ${{ matrix.proyecto }}
+        working-directory: RecepcionCelulares
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -21,4 +19,33 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet restore
       - run: dotnet build --no-restore -c Release
-      - run: dotnet test --no-build -c Release --verbosity normal
+      - run: dotnet test --no-build -c Release
+
+  inventario-mvc:
+    name: InventarioMvc (MVC + SQL Server)
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "Taller#2026Local"
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Taller#2026Local' -Q 'SELECT 1' || exit 1"
+          --health-interval 10s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: InventarioMvc
+    env:
+      INVENTARIO_SQL: "Server=localhost,1433;User Id=sa;Password=Taller#2026Local;TrustServerCertificate=True"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore
+      - run: dotnet build --no-restore -c Release
+      - run: dotnet test --no-build -c Release

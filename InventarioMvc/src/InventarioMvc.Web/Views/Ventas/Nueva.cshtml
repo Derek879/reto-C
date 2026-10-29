@@ -1,0 +1,87 @@
+@model NuevaVentaViewModel
+@{ ViewData["Title"] = "Nueva venta"; }
+
+<h1 class="h3 mb-3">Nueva venta</h1>
+
+<form asp-action="Nueva" method="post" id="form-venta">
+    @if (!ViewData.ModelState.IsValid)
+    {
+    <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+    }
+    <div class="mb-3 col-md-6">
+        <label asp-for="Cliente" class="form-label"></label>
+        <input asp-for="Cliente" class="form-control" placeholder="Nombre del cliente" />
+    </div>
+
+    <table class="table align-middle" id="lineas">
+        <thead><tr><th>Producto</th><th style="width:8rem">Cantidad</th><th class="text-end" style="width:9rem">Subtotal</th><th style="width:3rem"></th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr class="fw-semibold"><td colspan="2">Total</td><td class="text-end" id="total">S/ 0.00</td><td></td></tr></tfoot>
+    </table>
+
+    <button type="button" class="btn btn-outline-primary" id="agregar">+ Agregar producto</button>
+    <button class="btn btn-success ms-2">Registrar venta</button>
+</form>
+
+<template id="plantilla-linea">
+    <tr>
+        <td>
+            <select class="form-select producto" required>
+                <option value="">Elige un producto</option>
+                @foreach (var p in Model.Productos)
+                {
+                    <option value="@p.Id" data-precio="@p.PrecioVenta.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                            data-stock="@p.Stock" disabled="@(p.Stock == 0)">
+                        @p.Codigo · @p.Nombre · @p.PrecioVenta.ToString("C") (stock @p.Stock)
+                    </option>
+                }
+            </select>
+        </td>
+        <td><input type="number" class="form-control cantidad" min="1" value="1" required /></td>
+        <td class="text-end subtotal">S/ 0.00</td>
+        <td><button type="button" class="btn btn-sm btn-outline-danger quitar" aria-label="Quitar">✕</button></td>
+    </tr>
+</template>
+
+@section Scripts {
+<script>
+    const cuerpo = document.querySelector('#lineas tbody');
+    const soles = n => 'S/ ' + n.toFixed(2);
+
+    // Renombra los campos para que el model binder arme la lista Lineas[i]
+    function renumerar() {
+        let total = 0;
+        cuerpo.querySelectorAll('tr').forEach((fila, i) => {
+            const producto = fila.querySelector('.producto');
+            const cantidad = fila.querySelector('.cantidad');
+            producto.name = `Lineas[${i}].ProductoId`;
+            cantidad.name = `Lineas[${i}].Cantidad`;
+            const opcion = producto.selectedOptions[0];
+            const precio = parseFloat(opcion?.dataset.precio ?? 0);
+            cantidad.max = opcion?.dataset.stock ?? '';
+            const subtotal = precio * (parseInt(cantidad.value) || 0);
+            fila.querySelector('.subtotal').textContent = soles(subtotal);
+            total += subtotal;
+        });
+        document.querySelector('#total').textContent = soles(total);
+    }
+
+    function agregarLinea(productoId, cantidad) {
+        const fila = document.querySelector('#plantilla-linea').content.firstElementChild.cloneNode(true);
+        if (productoId) fila.querySelector('.producto').value = productoId;
+        if (cantidad) fila.querySelector('.cantidad').value = cantidad;
+        cuerpo.appendChild(fila);
+        renumerar();
+    }
+
+    document.querySelector('#agregar').addEventListener('click', () => agregarLinea());
+    cuerpo.addEventListener('input', renumerar);
+    cuerpo.addEventListener('click', e => {
+        if (e.target.classList.contains('quitar')) { e.target.closest('tr').remove(); renumerar(); }
+    });
+
+    // Si el formulario volvió con errores, se reconstruyen las líneas que el usuario había ingresado
+    const previas = @Json.Serialize(Model.Lineas);
+    previas.length ? previas.forEach(l => agregarLinea(l.productoId, l.cantidad)) : agregarLinea();
+</script>
+}

@@ -1,0 +1,36 @@
+@model IEnumerable<Venta>
+@{ ViewData["Title"] = "Ventas"; }
+
+<div class="d-flex align-items-center mb-3">
+    <h1 class="h3 me-auto mb-0">Ventas</h1>
+    <a class="btn btn-success" asp-action="Nueva">+ Nueva venta</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-4"><label class="form-label small">Desde</label><input type="date" name="desde" value="@ViewBag.Desde" class="form-control" /></div>
+    <div class="col-sm-4"><label class="form-label small">Hasta</label><input type="date" name="hasta" value="@ViewBag.Hasta" class="form-control" /></div>
+    <div class="col-sm-4 d-flex align-items-end"><button class="btn btn-secondary w-100">Ver</button></div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th class="text-end">Unidades</th><th class="text-end">Total</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var v in Model)
+    {
+        <tr class="@(v.Anulada ? "text-decoration-line-through text-muted" : "")">
+            <td>@v.Id</td>
+            <td>@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@v.Cliente</td>
+            <td class="text-end">@v.Unidades</td>
+            <td class="text-end">@v.Total.ToString("C")</td>
+            <td class="text-end"><a asp-action="Detalle" asp-route-id="@v.Id">Ver</a></td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr class="fw-semibold"><td colspan="4">Total (sin anuladas)</td>
+            <td class="text-end">@Model.Where(v => !v.Anulada).Sum(v => v.Total).ToString("C")</td><td></td></tr>
+    </tfoot>
+</table>
+</div>

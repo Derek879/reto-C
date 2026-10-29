@@ -1,0 +1,51 @@
+@model ReportesViewModel
+@{
+    ViewData["Title"] = "Reportes";
+    var meses = System.Globalization.CultureInfo.GetCultureInfo("es-PE").DateTimeFormat.AbbreviatedMonthNames.Take(12).ToArray();
+    var totales = Enumerable.Range(1, 12).Select(m => Model.PorMes.FirstOrDefault(x => x.Mes == m)?.Total ?? 0).ToArray();
+}
+
+<h1 class="h3 mb-3">Reportes</h1>
+
+<section class="mb-5">
+    <form method="get" class="d-flex gap-2 align-items-center mb-3">
+        <h2 class="h5 mb-0 me-auto">Ventas por mes</h2>
+        <input type="number" name="anio" value="@Model.Anio" class="form-control" style="width:7rem" aria-label="Año" />
+        <button class="btn btn-secondary">Ver</button>
+    </form>
+    <canvas id="grafico" height="90" aria-label="Ventas por mes"></canvas>
+</section>
+
+<section>
+    <form method="get" class="row g-2 align-items-end mb-3">
+        <div class="col-12 col-md"><h2 class="h5 mb-0">Productos más vendidos</h2></div>
+        <input type="hidden" name="anio" value="@Model.Anio" />
+        <div class="col-auto"><label class="form-label small">Desde</label><input type="date" name="desde" value="@Model.Desde.ToString("yyyy-MM-dd")" class="form-control" /></div>
+        <div class="col-auto"><label class="form-label small">Hasta</label><input type="date" name="hasta" value="@Model.Hasta.ToString("yyyy-MM-dd")" class="form-control" /></div>
+        <div class="col-auto"><button class="btn btn-secondary">Ver</button></div>
+    </form>
+    <table class="table table-sm">
+        <thead><tr><th>#</th><th>Código</th><th>Producto</th><th class="text-end">Unidades</th><th class="text-end">Total</th></tr></thead>
+        <tbody>
+        @{ var i = 1; }
+        @foreach (var t in Model.Top)
+        {
+            <tr><td>@(i++)</td><td><code>@t.Codigo</code></td><td>@t.Nombre</td><td class="text-end">@t.Unidades</td><td class="text-end">@t.Total.ToString("C")</td></tr>
+        }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts {
+<script src="~/lib/chart.js/chart.umd.js"></script>
+<script>
+    new Chart(document.getElementById('grafico'), {
+        type: 'bar',
+        data: {
+            labels: @Json.Serialize(meses),
+            datasets: [{ label: 'Ventas (S/)', data: @Json.Serialize(totales), backgroundColor: '#0d6efd' }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+</script>
+}

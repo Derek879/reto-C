@@ -1,0 +1,25 @@
+# Levanta SQL Server y la aplicación: docker compose up --build
+# Luego abre http://localhost:8081
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Taller#2026Local"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Taller#2026Local' -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 10
+
+  web:
+    build: .
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__SqlServer: "Server=sqlserver;Database=Inventario;User Id=sa;Password=Taller#2026Local;TrustServerCertificate=True"
+      Database__InicializarAlIniciar: "true"
+    ports:
+      - "8081:8080"
