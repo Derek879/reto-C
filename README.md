@@ -1,4 +1,4 @@
-# Proyectos en C# / .NET · Derek Parian Rojas
+# Proyectos en C# / .NET
 
 Estudiante de Diseño y Desarrollo de Software en Tecsup (Lima). Este repositorio reúne tres proyectos en .NET 8
 con SQL Server, cada uno con pruebas automáticas, Docker y CI en GitHub Actions.
